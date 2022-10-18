@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+</head>
+<body>
+
+<div id="root">
+
+    <h1>用户登录</h1>
+    <form>
+        用户名: <input type="text" v-model="user.username"> <br><br>
+        密 码: <input type="password" v-model="user.password"> <br><br>
+    </form>
+    <button type="button" @click="login">登录</button>
+
+</div>
+
+<script src="/static/js/vue.js"></script>
+<script src="/static/js/axios-0.18.0.js"></script>
+
+<script>
+    Vue.config.productionTip = false;
+    new Vue({
+        el: '#root',
+        data: {
+            user: {
+                username: '',
+                password: '',
+            }
+        },
+        methods: {
+            login() {
+                var _this = this;
+                axios({
+                    url: "http://localhost:8080/user/login",
+                    headers: {"Content-Type": "application/json"},
+                    method: "post",
+                    data: JSON.stringify(_this.user)
+                }).then(resp => {
+                    console.log(resp);
+                    if (resp.data.code === 200) {
+                        window.location.href ="http://localhost:8080/hello";
+                    } else {
+                        alert(resp.data.message);
+                    }
+                })
+            }
+        }
+    })
+</script>
+
+</body>
+</html>
